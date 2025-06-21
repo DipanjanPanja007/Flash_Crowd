@@ -32,7 +32,7 @@ const EventsList = () => {
                 ? `${event.location.lat}, ${event.location.lng}` 
                 : 'Location not specified')
         })) || [];
-        console.log("Normalized events:", normalizedEvents?.[0]?.host);
+        console.log("Normalized events:", normalizedEvents);
         setEvents(normalizedEvents);
       } catch (err) {
         console.error("Error fetching events:", err);
@@ -106,6 +106,28 @@ const EventsList = () => {
     );
   }
 
+  const handleJoinEvent = async (eventId) => {
+    try {
+      const response = await axiosInstance.post(`/event/add-participant/${eventId}`);
+      if (response.data.success) {
+        
+        // Optionally, you can refresh the events list or update the state
+        setEvents((prevEvents) =>
+          prevEvents.map((event) =>
+            event._id === eventId
+              ? { ...event, participants: [...(event.participants || []), response.data.user] }
+              : event
+          )
+        );
+      } else {
+        alert("Failed to join the event. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error joining event:", error);
+      alert("An error occurred while trying to join the event.");
+    }
+  }
+
   return (
     <div className="bg-gray-50 min-h-screen p-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Upcoming Events</h1>
@@ -164,7 +186,7 @@ const EventsList = () => {
                   <div>
                     <p className="text-sm text-gray-500">Hosted by</p>
                     <p className="font-medium">
-                      {event.host?.fullName || "Anonymous"}
+                      {event?.host?.fullName || "Anonymous"}
                     </p>
                   </div>
                 </div>
@@ -207,6 +229,7 @@ const EventsList = () => {
                 <button 
                   className={`w-full ${spotsLeft > 0 ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400 cursor-not-allowed'} text-white py-2 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center`}
                   disabled={spotsLeft <= 0}
+                  onClick={() => handleJoinEvent(event._id)}
                 >
                   <FaUsers className="mr-2" />
                   {spotsLeft > 0 ? "Join Event" : "Event Full"}
