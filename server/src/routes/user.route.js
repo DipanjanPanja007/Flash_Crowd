@@ -10,7 +10,7 @@ import {
 } from "../controllers/user.controller.js";
 import upload from "../utils/multer.js";
 
-router.route("/").get(verifyJWT, getUserInfo);
+router.route("/:userId").get(verifyJWT, getUserInfo);
 router.route("/login").post(handleLogin);
 router.route("/logout").post(handleLogout);
 router
