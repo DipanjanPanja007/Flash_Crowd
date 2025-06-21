@@ -1,4 +1,6 @@
 import AsyncHandler from "../utils/AsyncHandler.js";
+import eventSchema from "../models/event.model.js";
+import ParticipationSchema from "../models/participation.model.js";
 import userSchema from "../models/user.model.js";
 import friendSchema from "../models/friend.model.js";
 
@@ -106,15 +108,22 @@ const getUserInfo = AsyncHandler(async (req, res) => {
     });
   }
   const user = await userSchema.findById(userId).select("-password -refreshToken");
+
   if (!user) {
     return res.status(404).json({
       success: false,
       message: "User not found.",
     });
   }
+
+  const eventCount = await eventSchema.find({ host: userId });
+  const participationCount = await ParticipationSchema.findOne({
+    user: userId,
+  });
+
   return res
     .status(200)
-    .json({ success: true, message: "User found successfully.", user });
+    .json({ success: true, message: "User found successfully.", user, eventCount, participationCount });
 });
 
 export { searchUsers, searchFriends, updateUserInfo, getUserInfo };

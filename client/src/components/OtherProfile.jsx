@@ -15,6 +15,9 @@ const OtherProfile = ({ id }) => {
 
         const response = await handleGetUser(id);
 
+        console.log(response);
+
+
         if (response?.data?.success) {
             setUser(response.data.user);
         }
