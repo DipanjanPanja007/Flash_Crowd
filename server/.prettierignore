@@ -1,0 +1,6 @@
+.prettier*
+node_*
+public
+package*.json
+.env
+.gitignore
