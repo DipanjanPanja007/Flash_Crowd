@@ -62,8 +62,9 @@ const createEvent = AsyncHandler(async (req, res) => {
 });
 
 const getHostedEvents = AsyncHandler(async (req, res) => {
+  const { userId } = req.body;
   const events = await eventSchema
-    .find({ host: req.user._id })
+    .find({ host: userId })
     .populate("participants", "-password -refreshToken");
 
   if (!events || events.length === 0) {
@@ -81,8 +82,9 @@ const getHostedEvents = AsyncHandler(async (req, res) => {
 });
 
 const getParticipatedEvents = AsyncHandler(async (req, res) => {
+  const { userId } = req.body;
   const participation = await ParticipationSchema.findOne({
-    user: req.user._id,
+    user: userId,
   })
     .populate("events.id", "-participants")
     .select("events");
