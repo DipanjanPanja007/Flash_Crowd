@@ -11,7 +11,7 @@ const getMyFriends = AsyncHandler(async (req, res) => {
     })
     .populate({
       path: "sender receiver",
-      select: "fullName email avatar",
+      select: "fullName email avatar _id",
     });
 
   const friendList = friends.map((f) => {
