@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { format, parseISO } from "date-fns";
 import { axiosInstance } from "../lib/axios.js";
+import { toast } from "react-hot-toast";
 
 const EventsList = () => {
   const [events, setEvents] = useState([]);
@@ -110,7 +111,10 @@ const EventsList = () => {
     try {
       const response = await axiosInstance.post(`/event/add-participant`, {
         eventId,});
+        console.log(response);
+        
       if (response.data.success) {
+        toast.success("Successfully joined the event!");
         
         // Optionally, you can refresh the events list or update the state
         setEvents((prevEvents) =>
@@ -121,11 +125,12 @@ const EventsList = () => {
           )
         );
       } else {
-        alert("Failed to join the event. Please try again.");
+        toast.error(response.data.message || "Failed to join the event.");
+        //alert("Failed to join the event. Please try again.");
       }
     } catch (error) {
       console.error("Error joining event:", error);
-      alert("An error occurred while trying to join the event.");
+      toast.error(error.response?.data?.message || "An error occurred while joining the event.");
     }
   }
 
