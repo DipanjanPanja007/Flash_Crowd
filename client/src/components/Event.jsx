@@ -108,7 +108,8 @@ const EventsList = () => {
 
   const handleJoinEvent = async (eventId) => {
     try {
-      const response = await axiosInstance.post(`/event/add-participant/${eventId}`);
+      const response = await axiosInstance.post(`/event/add-participant`, {
+        eventId,});
       if (response.data.success) {
         
         // Optionally, you can refresh the events list or update the state
