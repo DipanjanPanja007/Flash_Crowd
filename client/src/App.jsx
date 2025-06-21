@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router';
 import Home from './pages/Home.jsx';
 import Profile from './pages/Profile.jsx';
 import AddEvent from './pages/AddEvent.jsx';
+import EventsList from './components/Event.jsx';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path='create' element={<AddEvent />} />
           <Route path=':id' element={<h1>second</h1>} />
         </Route>
+        <Route path="/test" element={<EventsList />} />
       </Routes>
     </>
   )
