@@ -20,7 +20,7 @@ const EventsList = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axiosInstance.get(`/event/currEvent`);
+        const response = await axiosInstance.get(`/event/upcomingEvent`);
 
         // console.log("Fetched events:", response?.data?.events?.[0]?.host?.avatar);
 
