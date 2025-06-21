@@ -1,17 +1,27 @@
-import { useSelector } from 'react-redux';
 import { FiUser, FiStar, FiUsers, FiAward } from 'react-icons/fi';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { handleGetUser } from '../api/user.js';
 
 const OtherProfile = ({ id }) => {
+
     const [user, setUser] = useState(null);
 
-    const handleGetUser = useCallback(() => {
-        
-    }, [])
+    const getUser = useCallback(async () => {
+
+        const response = await handleGetUser(id);
+
+        if (response?.data?.success) {
+            setUser(response.data.user);
+        }
+        else {
+            console.error("Failed to fetch user data:", response?.data?.message || "Unknown error");
+        }
+
+    }, [id])
 
     useEffect(() => {
-        handleGetUser
-    }, [handleGetUser])
+        getUser();
+    }, [getUser])
 
     return (
 
