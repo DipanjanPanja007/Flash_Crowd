@@ -39,7 +39,7 @@ export default function ProfileDropdown() {
                     <Users size={23} /> Connections
                 </Link>
                 <Link
-                    to={"/events/ongoing"}
+                    to={"/events"}
                     className="flex items-center gap-2 px-5 py-3 text-gray-800 hover:bg-gray-100"
                     onClick={() => setIsDropdownOpen(false)}
                 >
