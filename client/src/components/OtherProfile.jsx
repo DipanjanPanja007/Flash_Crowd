@@ -1,13 +1,12 @@
 import { FiUser, FiStar, FiUsers, FiAward } from 'react-icons/fi';
 import { useCallback, useEffect, useState } from 'react';
 import { handleGetUser } from '../api/user.js';
-import { axiosInstance } from '../lib/axios.js';
 
 const OtherProfile = ({ id }) => {
 
     const [user, setUser] = useState(null);
-    const [noOfHostedEvents, setNoOfHostedEvents] = useState(0);
-    const [noOfJoinedEvents, setNoOfJoinedEvents] = useState(0);
+    const [hostedEvents, setHostedEvents] = useState(0);
+    const [joinedEvents, setJoinedEvents] = useState(0);
 
     // const getdata = 
 
@@ -16,6 +15,8 @@ const OtherProfile = ({ id }) => {
         const response = await handleGetUser(id);
 
         console.log(response);
+        setHostedEvents(response?.data?.eventCount);
+        setJoinedEvents(response?.data?.participationCount?.events);
 
 
         if (response?.data?.success) {
@@ -29,20 +30,7 @@ const OtherProfile = ({ id }) => {
 
     console.log("User data :", user);
 
-    useCallback(async () => {
 
-        const response = await axiosInstance.get(`/user`,{id});
-
-        console.log("Response from getUser:", response);
-
-        if (response?.data?.success) {
-            setUser(response.data.user);
-        }
-        else {
-            console.error("Failed to fetch user data:", response?.data?.message || "Unknown error");
-        }
-
-    }, [id])
 
 
 
@@ -132,11 +120,11 @@ const OtherProfile = ({ id }) => {
                                 <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">FlashCrowd Stats</h4>
                                 <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                                     <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                        <p className="text-2xl font-bold text-indigo-600">12</p>
+                                        <p className="text-2xl font-bold text-indigo-600">{hostedEvents?.length}</p>
                                         <p className="text-gray-500 text-sm">Events Hosted</p>
                                     </div>
                                     <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                        <p className="text-2xl font-bold text-indigo-600">47</p>
+                                        <p className="text-2xl font-bold text-indigo-600">{joinedEvents?.length}</p>
                                         <p className="text-gray-500 text-sm">Events Joined</p>
                                     </div>
                                     {/* <div className="bg-gray-50 p-4 rounded-lg text-center">
