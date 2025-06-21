@@ -120,11 +120,11 @@ const OtherProfile = ({ id }) => {
                                 <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">FlashCrowd Stats</h4>
                                 <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                                     <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                        <p className="text-2xl font-bold text-indigo-600">{hostedEvents?.length}</p>
+                                        <p className="text-2xl font-bold text-indigo-600">{hostedEvents?.length || 0}</p>
                                         <p className="text-gray-500 text-sm">Events Hosted</p>
                                     </div>
                                     <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                        <p className="text-2xl font-bold text-indigo-600">{joinedEvents?.length}</p>
+                                        <p className="text-2xl font-bold text-indigo-600">{joinedEvents?.length || 0}</p>
                                         <p className="text-gray-500 text-sm">Events Joined</p>
                                     </div>
                                     {/* <div className="bg-gray-50 p-4 rounded-lg text-center">
