@@ -18,6 +18,8 @@ const EventsList = () => {
     const fetchEvents = async () => {
       try {
         const response = await axiosInstance.get(`/event/currEvent`);
+
+        // console.log("Fetched events:", response?.data?.events?.[0]?.host?.avatar);
         
         // Normalize events data to handle location objects
         const normalizedEvents = response?.data?.events?.map(event => ({
@@ -30,7 +32,7 @@ const EventsList = () => {
                 ? `${event.location.lat}, ${event.location.lng}` 
                 : 'Location not specified')
         })) || [];
-        
+        console.log("Normalized events:", normalizedEvents?.[0]?.host);
         setEvents(normalizedEvents);
       } catch (err) {
         console.error("Error fetching events:", err);
@@ -152,8 +154,12 @@ const EventsList = () => {
 
                 {/* Host */}
                 <div className="flex items-center mb-4">
-                  <div className="bg-gray-200 rounded-full p-2 mr-3">
+                  <div className="bg-gray-200 rounded-full mr-3">
                     {/* <FaUser className="text-gray-600" /> */}
+                    <img 
+                      className="w-10 h-10 rounded-full"
+                      src={event?.host?.avatar}
+                    />
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Hosted by</p>
