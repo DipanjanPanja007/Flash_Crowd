@@ -22,7 +22,7 @@ const EventsList = () => {
       try {
         const response = await axiosInstance.get(`/event/upcomingEvent`);
 
-        // console.log("Fetched events:", response?.data?.events?.[0]?.host?.avatar);
+        console.log("Fetched events:", response?.data?.events?.[0]?.host?.avatar);
 
         // Normalize events data to handle location objects
         const normalizedEvents = response?.data?.events
