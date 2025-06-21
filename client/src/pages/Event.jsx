@@ -1,5 +1,5 @@
 import OngoingEvent from "../components/OngoingEvent"
-import UpComingEvent from "../components/UpcomingEventForHome"
+import UpComingEvent from "../components/UpcomingEvent"
 
 
 
@@ -10,7 +10,10 @@ const Event = () => {
 
                 <OngoingEvent />
             </div>
-            <UpComingEvent />
+            <div>
+
+                <UpComingEvent />
+            </div>
         </div>
     )
 }
