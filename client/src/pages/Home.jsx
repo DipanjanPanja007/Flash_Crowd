@@ -4,6 +4,7 @@ import { motion, useAnimation, useInView } from 'framer-motion';
 import SportsCarousel from '../components/SportsCarousel';
 import Footer from '../components/Footer';
 import EventsList from '../components/UpcomingEventForHome';
+import { Link } from 'react-router';
 
 const LandingPage = () => {
     const controls = useAnimation();
@@ -86,9 +87,9 @@ const LandingPage = () => {
                             }
                         }}
                     >
-                        <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:cursor-pointer">
+                        <Link to="/events" className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:cursor-pointer">
                             Get Started
-                        </button>
+                        </Link>
                     </motion.div>
                 </motion.div>
 
