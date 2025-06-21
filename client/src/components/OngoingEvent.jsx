@@ -127,7 +127,7 @@ const OngoingEvent = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Upcoming Events</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Ongoing Events</h1>
 
       <div className="flex md:grid overflow-x-auto md:overflow-visible gap-6 md:gap-8 pb-4 md:pb-0 md:grid-cols-2 lg:grid-cols-3">
         {events.map((event) => {

@@ -11,7 +11,7 @@ import { axiosInstance } from "../lib/axios.js";
 import { toast } from "react-hot-toast";
 import Map from "./Map.jsx";
 
-const EventsList = () => {
+const UpComingEvent = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -236,4 +236,4 @@ const EventsList = () => {
   );
 };
 
-export default EventsList;
+export default UpComingEvent;
