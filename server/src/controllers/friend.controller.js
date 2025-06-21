@@ -170,10 +170,75 @@ const acceptFriendRequest = AsyncHandler(async (req, res) => {
   });
 });
 
+const removeFriend = AsyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { friendId } = req.body;
+
+  if (!friendId) {
+    return res.status(400).json({
+      success: false,
+      message: "Friend ID is required",
+    });
+  }
+
+  const removed = await friendSchema.findOneAndDelete({
+    $or: [
+      { sender: userId, receiver: friendId },
+      { sender: friendId, receiver: userId },
+    ],
+    status: "accepted",
+  });
+
+  if (!removed) {
+    return res.status(404).json({
+      success: false,
+      message: "No friendship found to remove",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Friend removed successfully",
+  });
+});
+
+const friendStatus = AsyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { friendId } = req.body;
+
+  if (!friendId) {
+    return res.status(400).json({
+      success: false,
+      message: "Friend ID is required",
+    });
+  }
+
+  const friendship = await friendSchema.findOne({
+    $or: [
+      { sender: userId, receiver: friendId },
+      { sender: friendId, receiver: userId },
+    ],
+  });
+
+  if (!friendship) {
+    return res.status(404).json({
+      success: false,
+      message: "No friendship found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    status: friendship.status,
+  });
+});
+
 export {
   getMyFriends,
   searchFriends,
   sendFriendRequest,
   deleteFriendRequest,
   acceptFriendRequest,
+  removeFriend,
+  friendStatus
 };
