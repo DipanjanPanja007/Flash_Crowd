@@ -151,7 +151,7 @@ const getOngoingEvents = AsyncHandler(async (req, res) => {
   const events = await eventSchema.find({
     startTime: { $lte: now },
     endTime: { $gte: now },
-  }).populate("host", "_id name email avatar");
+  }).populate("host", "_id fullName email avatar");
 
   res.status(200).json({
     success: true,
