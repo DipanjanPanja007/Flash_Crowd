@@ -19,7 +19,7 @@ const getMyFriends = AsyncHandler(async (req, res) => {
     return isSender ? f.receiver : f.sender;
   });
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     count: friendList.length,
     friends: friendList,
@@ -57,7 +57,7 @@ const searchFriends = AsyncHandler(async (req, res) => {
     })
     .select("-password -refreshToken");
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     friends: matchedFriends,
   });
@@ -103,7 +103,7 @@ const sendFriendRequest = AsyncHandler(async (req, res) => {
     status: "pending",
   });
 
-  res.status(201).json({
+  return res.status(201).json({
     success: true,
     message: "Friend request sent successfully",
     data: friendRequest,
@@ -129,7 +129,7 @@ const deleteFriendRequest = AsyncHandler(async (req, res) => {
     });
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: "Friend request canceled successfully",
   });
@@ -163,7 +163,7 @@ const acceptFriendRequest = AsyncHandler(async (req, res) => {
     });
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: "Friend request accepted successfully",
     data: request,
@@ -196,7 +196,7 @@ const removeFriend = AsyncHandler(async (req, res) => {
     });
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: "Friend removed successfully",
   });
@@ -227,7 +227,7 @@ const friendStatus = AsyncHandler(async (req, res) => {
     });
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     status: friendship.status,
   });
