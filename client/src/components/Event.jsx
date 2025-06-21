@@ -9,6 +9,7 @@ import {
 import { format, parseISO } from "date-fns";
 import { axiosInstance } from "../lib/axios.js";
 import { toast } from "react-hot-toast";
+import Map from "./Map.jsx";
 
 const EventsList = () => {
   const [events, setEvents] = useState([]);
@@ -21,18 +22,19 @@ const EventsList = () => {
         const response = await axiosInstance.get(`/event/currEvent`);
 
         // console.log("Fetched events:", response?.data?.events?.[0]?.host?.avatar);
-        
+
         // Normalize events data to handle location objects
-        const normalizedEvents = response?.data?.events?.map(event => ({
-          ...event,
-          // Handle location whether it's a string or object
-          location: typeof event.location === 'string' 
-            ? event.location 
-            : event.location?.address || 
-              (event.location?.lat && event.location?.lng 
-                ? `${event.location.lat}, ${event.location.lng}` 
-                : 'Location not specified')
-        })) || [];
+        const normalizedEvents = response?.data?.events
+        // ?.map(event => ({
+        //   ...event,
+        //   // Handle location whether it's a string or object
+        //   location: typeof event.location === 'string' 
+        //     ? event.location 
+        //     : event.location?.address || 
+        //       (event.location?.lat && event.location?.lng 
+        //         ? `${event.location.lat}, ${event.location.lng}` 
+        //         : 'Location not specified')
+        // })) || [];
         console.log("Normalized events:", normalizedEvents);
         setEvents(normalizedEvents);
       } catch (err) {
@@ -110,12 +112,13 @@ const EventsList = () => {
   const handleJoinEvent = async (eventId) => {
     try {
       const response = await axiosInstance.post(`/event/add-participant`, {
-        eventId,});
-        console.log(response);
-        
+        eventId,
+      });
+      console.log(response);
+
       if (response.data.success) {
         toast.success("Successfully joined the event!");
-        
+
         // Optionally, you can refresh the events list or update the state
         setEvents((prevEvents) =>
           prevEvents.map((event) =>
@@ -140,12 +143,15 @@ const EventsList = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {events.map((event) => {
+          console.log(event);
+          event.position = event.location;
+
           const start = formatDateTime(event.startTime);
           const end = formatDateTime(event.endTime);
           const participantsCount = event.participants?.length || 0;
           const spotsLeft = event.maxLimit - participantsCount;
           const progressPercentage = Math.min(
-            (participantsCount / event.maxLimit) * 100, 
+            (participantsCount / event.maxLimit) * 100,
             100
           );
 
@@ -155,11 +161,9 @@ const EventsList = () => {
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               {/* Event Image */}
-              {/* <div className="h-48 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
-                <span className="text-white text-xl font-bold">
-                  {event.category || "Event"}
-                </span>
-              </div> */}
+              <div className="h-48">
+                {<Map events={[event]} className="" />}
+              </div>
 
               {/* Event Content */}
               <div className="p-6">
@@ -184,7 +188,7 @@ const EventsList = () => {
                 <div className="flex items-center mb-4">
                   <div className="bg-gray-200 rounded-full mr-3">
                     {/* <FaUser className="text-gray-600" /> */}
-                    <img 
+                    <img
                       className="w-10 h-10 rounded-full"
                       src={event?.host?.avatar}
                     />
@@ -212,7 +216,7 @@ const EventsList = () => {
                   <div className="flex items-center">
                     <FaMapMarkerAlt className="text-gray-400 mr-3" />
                     <span className="text-gray-700">
-                      {event.location || "Location not specified"}
+                      {"Location not specified"}
                     </span>
                   </div>
                 </div>
@@ -232,7 +236,7 @@ const EventsList = () => {
                 </div>
 
                 {/* Join Button */}
-                <button 
+                <button
                   className={`w-full ${spotsLeft > 0 ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400 cursor-not-allowed'} text-white py-2 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center`}
                   disabled={spotsLeft <= 0}
                   onClick={() => handleJoinEvent(event._id)}
