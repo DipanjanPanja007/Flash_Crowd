@@ -48,7 +48,8 @@ const createEvent = AsyncHandler(async (req, res) => {
     startTime,
     endTime,
     participants: [req.user._id],
-  }).populate("host", "_id name avatar");
+  });
+  await event.populate("host", "_id fullName avatar");
 
   await ParticipationSchema.create({
     user: req.user._id,
