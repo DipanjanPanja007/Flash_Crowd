@@ -21,6 +21,8 @@ const createEvent = AsyncHandler(async (req, res) => {
     endTime,
   } = req.body;
 
+  console.log(req.body);
+
   // Validate required fields
   if (
     [title, description, category, location, endTime].some(
@@ -47,6 +49,11 @@ const createEvent = AsyncHandler(async (req, res) => {
     endTime,
     participants: [req.user._id],
   });
+
+  await ParticipationSchema.create({
+    user: req.user._id,
+    events: [{ id: event._id }],
+  })
 
   res.status(201).json({
     success: true,
@@ -140,7 +147,7 @@ const addParticipant = AsyncHandler(async (req, res) => {
 const getOngoingEvents = AsyncHandler(async (req, res) => {
   const now = new Date();
 
-  const events = await Event.find({
+  const events = await eventSchema.find({
     startTime: { $lte: now },
     endTime: { $gte: now },
   }).populate("host", "_id name email avatar");
@@ -151,10 +158,25 @@ const getOngoingEvents = AsyncHandler(async (req, res) => {
   });
 });
 
+const getUpcomingEvents = AsyncHandler(async (req, res) => {
+  const now = new Date();
+
+  const events = await eventSchema.find({ startTime: { $gt: now } })
+    .populate("host", "fullName avatar")
+    .sort({ startTime: 1 }); // sort by soonest first
+
+  res.status(200).json({
+    success: true,
+    count: events.length,
+    events,
+  });
+});
+
 export {
   createEvent,
   getHostedEvents,
   getParticipatedEvents,
   addParticipant,
   getOngoingEvents,
+  getUpcomingEvents,
 };
