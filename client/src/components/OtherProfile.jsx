@@ -5,12 +5,18 @@ import { handleGetUser } from '../api/user.js';
 const OtherProfile = ({ id }) => {
 
     const [user, setUser] = useState(null);
+    const [hostedEvents, setHostedEvents] = useState(0);
+    const [joinedEvents, setJoinedEvents] = useState(0);
+
+    // const getdata = 
 
     const getUser = useCallback(async () => {
 
         const response = await handleGetUser(id);
 
         console.log(response);
+        setHostedEvents(response?.data?.eventCount);
+        setJoinedEvents(response?.data?.participationCount?.events);
 
 
         if (response?.data?.success) {
@@ -21,6 +27,12 @@ const OtherProfile = ({ id }) => {
         }
 
     }, [id])
+
+    console.log("User data :", user);
+
+
+
+
 
     useEffect(() => {
         getUser();
@@ -106,19 +118,19 @@ const OtherProfile = ({ id }) => {
                             {/* Activity Stats (example) */}
                             <div>
                                 <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">FlashCrowd Stats</h4>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                                     <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                        <p className="text-2xl font-bold text-indigo-600">12</p>
+                                        <p className="text-2xl font-bold text-indigo-600">{hostedEvents?.length || 0}</p>
                                         <p className="text-gray-500 text-sm">Events Hosted</p>
                                     </div>
                                     <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                        <p className="text-2xl font-bold text-indigo-600">47</p>
+                                        <p className="text-2xl font-bold text-indigo-600">{joinedEvents?.length || 0}</p>
                                         <p className="text-gray-500 text-sm">Events Joined</p>
                                     </div>
-                                    <div className="bg-gray-50 p-4 rounded-lg text-center">
+                                    {/* <div className="bg-gray-50 p-4 rounded-lg text-center">
                                         <p className="text-2xl font-bold text-indigo-600">89%</p>
                                         <p className="text-gray-500 text-sm">Reliability</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

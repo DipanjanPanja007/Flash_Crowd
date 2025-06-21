@@ -11,7 +11,7 @@ import { axiosInstance } from "../lib/axios.js";
 import { toast } from "react-hot-toast";
 import Map from "./Map.jsx";
 
-const EventsList = () => {
+const UpComingEvent = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ const EventsList = () => {
       try {
         const response = await axiosInstance.get(`/event/upcomingEvent`);
         // Get the last 3 upcoming events by sorting and slicing
-        const sortedEvents = response?.data?.events?.sort((a, b) => 
+        const sortedEvents = response?.data?.events?.sort((a, b) =>
           new Date(a.startTime) - new Date(b.startTime)
         );
         const lastThreeEvents = sortedEvents?.slice(-3) || [];
@@ -123,10 +123,10 @@ const EventsList = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen p-6">
-      <h1 className="text-3xl font-bold text-indigo-700 text-center mb-8">Last 3 Upcoming Events</h1>
+    <div className="bg-gray-100 rounded-xl min-h-screen p-3 m-3">
+      <h1 className="text-3xl font-bold text-indigo-700 text-center mb-8">Upcoming Events</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="flex overflow-x-auto gap-6 pb-4">
         {events.map((event) => {
           event.position = event.location;
           const start = formatDateTime(event.startTime);
@@ -141,7 +141,7 @@ const EventsList = () => {
           return (
             <div
               key={event._id}
-              className="bg-white border border-black rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 p-5"
+              className="min-w-full md:min-w-[50%] lg:min-w-[33.3333%] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               {/* Event Image */}
               <div className="h-48">
@@ -236,4 +236,4 @@ const EventsList = () => {
   );
 };
 
-export default EventsList;
+export default UpComingEvent;

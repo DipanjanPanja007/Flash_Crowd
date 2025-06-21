@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { User, Users, ChevronDown, LogOut, CalendarDays } from 'lucide-react';
+import { User, Users, ChevronDown, LogOut, CalendarDays, CalendarPlus } from 'lucide-react';
 import { useUser } from '@civic/auth/react';
 import { useSelector } from 'react-redux';
 
@@ -39,11 +39,18 @@ export default function ProfileDropdown() {
                     <Users size={23} /> Connections
                 </Link>
                 <Link
-                    to={"/events/ongoing"}
+                    to={"/events"}
                     className="flex items-center gap-2 px-5 py-3 text-gray-800 hover:bg-gray-100"
                     onClick={() => setIsDropdownOpen(false)}
                 >
                     <CalendarDays size={21} /> Events
+                </Link>
+                <Link
+                    to={"/events/create"}
+                    className="flex items-center gap-2 px-5 py-3 text-gray-800 hover:bg-gray-100"
+                    onClick={() => setIsDropdownOpen(false)}
+                >
+                    <CalendarPlus size={21} /> Add Events
                 </Link>
                 <button
                     className="flex items-center gap-2 px-5 py-3 w-full hover:cursor-pointer text-gray-800 hover:bg-gray-100"
