@@ -10,13 +10,36 @@ import { format, parseISO } from "date-fns";
 import { axiosInstance } from "../lib/axios.js";
 import { toast } from "react-hot-toast";
 import Map from "./Map.jsx";
+import { getDistance } from "geolib";
+
+
+
+
 
 const UpComingEvent = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
+
 
   useEffect(() => {
+
+    // Get user's current location
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (err) => {
+        console.error("Failed to get user location", err);
+        toast.error("Enable location to view distance to events.");
+      }
+    );
+
+
     const fetchEvents = async () => {
       try {
         const response = await axiosInstance.get(`/event/upcomingEvent`);
@@ -199,8 +222,22 @@ const UpComingEvent = () => {
                   <div className="flex items-center">
                     <FaMapMarkerAlt className="text-gray-400 mr-3" />
                     <span className="text-gray-700">
-                      {event.location?.address || "Location not specified"}
+                      {userLocation && event?.location?.lat && event?.location?.lng
+                        ? `${(
+                          getDistance(
+                            {
+                              latitude: userLocation.latitude,
+                              longitude: userLocation.longitude,
+                            },
+                            {
+                              latitude: event.location.lat,
+                              longitude: event.location.lng,
+                            }
+                          ) / 1000
+                        ).toFixed(2)} km away`
+                        : "Location not specified"}
                     </span>
+
                   </div>
                 </div>
 

@@ -1,15 +1,17 @@
 import { FiUser, FiStar, FiUsers, FiAward } from 'react-icons/fi';
 import { useCallback, useEffect, useState } from 'react';
 import { handleGetUser } from '../api/user.js';
-import { UserPlus } from 'lucide-react';
+import { UserPlus, UserMinus, XCircle } from 'lucide-react';
 import { toast } from "react-hot-toast";
-import { handleSendFriendRequest } from '../api/friend.js';
+import { handleAcceptRequest, handleDeleteRequest, handleRemoveRequest, handleSendFriendRequest } from '../api/friend.js';
 
 const OtherProfile = ({ id }) => {
 
     const [user, setUser] = useState(null);
     const [hostedEvents, setHostedEvents] = useState(0);
     const [joinedEvents, setJoinedEvents] = useState(0);
+    const [isFriend, setIsFriend] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const getUser = useCallback(async () => {
 
@@ -27,18 +29,75 @@ const OtherProfile = ({ id }) => {
 
     }, [id])
 
+    const getUserStatus = useCallback(async () => {
+        if (!id) return;
+        try {
+            const response = await handleGetUser(id);
+            if (response?.data?.success) {
+                setIsFriend(response.data.success);
+            } else {
+                console.error("Failed to fetch user status:", response?.data?.message || "Unknown error");
+            }
+        } catch (error) {
+            console.error("Error fetching user status:", error);
+            setIsLoading(false);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        if (id) {
+            getUserStatus();
+        }
+    }, [id, getUserStatus]);
+
     useEffect(() => {
         getUser();
     }, [getUser])
 
     const sendRequest = async () => {
+        setIsLoading(true);
         const response = await handleSendFriendRequest({ receiverId: id });
         if (response?.data?.success) {
             toast.success("Friend request sent successfully!");
         } else {
             toast.error("Failed to send friend request");
         }
+        setIsLoading(false);
     }
+
+    const deleteRequest = async () => {
+        setIsLoading(true);
+        const response = await handleDeleteRequest({ receiverId: id });
+        if (response?.data?.success) {
+            toast.success("Friend request deleted successfully!");
+        } else {
+            toast.error("Failed to delete friend request");
+        }
+        setIsLoading(false);
+    }
+    const removeFriend = async () => {
+        setIsLoading(true);
+        const response = await handleRemoveRequest({ friendId: id });
+        console.log(response);
+
+        if (response?.data?.success) {
+            toast.success("Friend removed successfully!");
+        } else {
+            toast.error("Failed to remove friend");
+        }
+        setIsLoading(false);
+    }
+    const acceptRequest = async () => {
+        setIsLoading(true);
+        const response = await handleAcceptRequest({ senderId: id });
+        if (response?.data?.success) {
+            toast.success("Friend request accepted successfully!");
+        } else {
+            toast.error("Failed to accept friend request");
+        }
+        setIsLoading(false);
+    }
+
 
     if (!user) {
         return (
@@ -66,15 +125,38 @@ const OtherProfile = ({ id }) => {
                             <h2 className="mt-4 text-2xl font-bold text-gray-900">{user?.fullName || 'Anonymous User'}</h2>
                             <p className="text-gray-500 text-center mt-2">{user?.bio || 'Hey there! I\'m using FlashCrowd.'}</p>
 
-                            <div className='py-4'>
-                                <button
-                                    className="inline-flex hover:cursor-pointer items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
-                                    onClick={sendRequest}
-                                >
-                                    <UserPlus className="w-5 h-5 mr-2" />
-                                    Add Friend
-                                </button>
-                            </div>
+                            {/* <div className="flex gap-3">
+                                {
+                                    isFriend ?
+
+                                        <button disabled={isLoading}
+                                            onClick={removeFriend}
+                                            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition duration-200"
+                                        >
+                                            <UserMinus className="w-5 h-5" />
+                                            <span>Remove Friend</span>
+                                        </button>
+                                        :
+                                        <>
+
+                                            <button disabled={isLoading}
+                                                onClick={deleteRequest}
+                                                className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow hover:bg-gray-300 transition duration-200"
+                                            >
+                                                <XCircle className="w-5 h-5" />
+                                                <span>Delete Request</span>
+                                            </button>
+                                            <button disabled={isLoading}
+                                                className="inline-flex hover:cursor-pointer items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+                                                onClick={sendRequest}
+                                            >
+                                                <UserPlus className="w-5 h-5 mr-2" />
+                                                Add Friend
+                                            </button>
+                                        </>
+                                }
+                            </div> */}
+
                             {/* Stats Section */}
                             <div className="mt-6 w-full space-y-3">
                                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
