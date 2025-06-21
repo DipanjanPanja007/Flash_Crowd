@@ -15,28 +15,15 @@ const OngoingEvent = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // let isDisabled = false;
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const response = await axiosInstance.get(`/event/currEvent`);
 
-        // console.log("Fetched events:", response?.data?.events?.[0]?.host?.avatar);
-
         // Normalize events data to handle location objects
         const normalizedEvents = response?.data?.events
-        // ?.map(event => ({
-        //   ...event,
-        //   // Handle location whether it's a string or object
-        //   location: typeof event.location === 'string' 
-        //     ? event.location 
-        //     : event.location?.address || 
-        //       (event.location?.lat && event.location?.lng 
-        //         ? `${event.location.lat}, ${event.location.lng}` 
-        //         : 'Location not specified')
-        // })) || [];
-        // console.log("Normalized events:", normalizedEvents);
+
         setEvents(normalizedEvents);
       } catch (err) {
         console.error("Error fetching events:", err);
@@ -142,7 +129,7 @@ const OngoingEvent = () => {
     <div className="bg-gray-50 min-h-screen p-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Upcoming Events</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="flex overflow-x-auto gap-6 pb-4">
         {events.map((event) => {
           console.log(event);
           event.position = event.location;
@@ -159,7 +146,7 @@ const OngoingEvent = () => {
           return (
             <div
               key={event._id}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              className="min-w-full md:min-w-[50%] lg:min-w-[33.3333%] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               {/* Event Image */}
               <div className="h-48">
