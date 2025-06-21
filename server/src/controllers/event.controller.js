@@ -21,8 +21,6 @@ const createEvent = AsyncHandler(async (req, res) => {
     endTime,
   } = req.body;
 
-  console.log(req.body);
-
   // Validate required fields
   if (
     [title, description, category, location, endTime].some(

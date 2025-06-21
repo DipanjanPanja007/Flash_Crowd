@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import OwnProfile from '../components/OwnProfile.jsx';
+import OtherProfile from '../components/OtherProfile.jsx';
 
 function Profile() {
 
@@ -12,7 +13,7 @@ function Profile() {
         <>
             {
                 id == auth?._id ?
-                    < OwnProfile /> : <p>45</p>
+                    < OwnProfile /> : <OtherProfile id={id} />
             }
         </>
     )

@@ -123,7 +123,7 @@ const Map = ({ events = [], zoomIn = 13 }) => {
                     events.map((event) => {
                         const distance = getDistance(userLocation, [event.position.lat, event.position.lng]);
                         return (
-                            <EventMarker distance={distance} event={event} getEventIcon={getEventIcon} key={event.id} />
+                            <EventMarker distance={distance} event={event} getEventIcon={getEventIcon} key={event.id + Date.now()} />
                         );
                     })}
             </MapContainer>
