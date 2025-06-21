@@ -1,6 +1,9 @@
 import { FiUser, FiStar, FiUsers, FiAward } from 'react-icons/fi';
 import { useCallback, useEffect, useState } from 'react';
 import { handleGetUser } from '../api/user.js';
+import { UserPlus } from 'lucide-react';
+import { toast } from "react-hot-toast";
+import { handleSendFriendRequest } from '../api/friend.js';
 
 const OtherProfile = ({ id }) => {
 
@@ -8,16 +11,12 @@ const OtherProfile = ({ id }) => {
     const [hostedEvents, setHostedEvents] = useState(0);
     const [joinedEvents, setJoinedEvents] = useState(0);
 
-    // const getdata = 
-
     const getUser = useCallback(async () => {
 
         const response = await handleGetUser(id);
 
-        console.log(response);
         setHostedEvents(response?.data?.eventCount);
         setJoinedEvents(response?.data?.participationCount?.events);
-
 
         if (response?.data?.success) {
             setUser(response.data.user);
@@ -28,15 +27,18 @@ const OtherProfile = ({ id }) => {
 
     }, [id])
 
-    console.log("User data :", user);
-
-
-
-
-
     useEffect(() => {
         getUser();
     }, [getUser])
+
+    const sendRequest = async () => {
+        const response = await handleSendFriendRequest({ receiverId: id });
+        if (response?.data?.success) {
+            toast.success("Friend request sent successfully!");
+        } else {
+            toast.error("Failed to send friend request");
+        }
+    }
 
     if (!user) {
         return (
@@ -64,6 +66,15 @@ const OtherProfile = ({ id }) => {
                             <h2 className="mt-4 text-2xl font-bold text-gray-900">{user?.fullName || 'Anonymous User'}</h2>
                             <p className="text-gray-500 text-center mt-2">{user?.bio || 'Hey there! I\'m using FlashCrowd.'}</p>
 
+                            <div className='py-4'>
+                                <button
+                                    className="inline-flex hover:cursor-pointer items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+                                    onClick={sendRequest}
+                                >
+                                    <UserPlus className="w-5 h-5 mr-2" />
+                                    Add Friend
+                                </button>
+                            </div>
                             {/* Stats Section */}
                             <div className="mt-6 w-full space-y-3">
                                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
