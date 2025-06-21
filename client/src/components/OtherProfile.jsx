@@ -1,10 +1,17 @@
 import { useSelector } from 'react-redux';
 import { FiUser, FiStar, FiUsers, FiAward } from 'react-icons/fi';
+import { useCallback, useEffect } from 'react';
 
 const OtherProfile = ({ id }) => {
     const [user, setUser] = useState(null);
 
-    const handleGetUser = async () => { }
+    const handleGetUser = useCallback(() => {
+        
+    }, [])
+
+    useEffect(() => {
+        handleGetUser
+    }, [handleGetUser])
 
     return (
 
