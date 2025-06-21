@@ -178,7 +178,7 @@ const UpComingEvent = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Hosted by</p>
-                    <p className="font-medium">
+                    <p className="font-medium text-black">
                       {event?.host?.fullName || "Anonymous"}
                     </p>
                   </div>

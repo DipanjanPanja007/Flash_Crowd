@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": ".src/index.js",
-    "start": "nodemon ./src/index.js",
+    "start": "node ./src/index.js",
     "write": "prettier . --write"
   },
   "keywords": [],
