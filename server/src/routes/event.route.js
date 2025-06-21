@@ -13,7 +13,7 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 router.route("/").post(verifyJWT, createEvent);
 router.route("/hosted").get(verifyJWT, getHostedEvents);
 router.route("/participated").get(verifyJWT, getParticipatedEvents);
-router.route("/add-participant/:eventid").post(verifyJWT, addParticipant);
+router.route("/add-participant").post(verifyJWT, addParticipant);
 router.route("/currEvent").get(verifyJWT, getOngoingEvents);
 router.route("/upcomingEvent").get(getUpcomingEvents);
 

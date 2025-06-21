@@ -15,6 +15,7 @@ const EventsList = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // let isDisabled = false;
 
   useEffect(() => {
     const fetchEvents = async () => {

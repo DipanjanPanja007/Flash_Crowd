@@ -107,7 +107,7 @@ const getParticipatedEvents = AsyncHandler(async (req, res) => {
 });
 
 const addParticipant = AsyncHandler(async (req, res) => {
-  const { eventId } = req.params;
+  const { eventId } = req.body;
   if (!eventId) {
     return res.status(400).json({
       success: false,
