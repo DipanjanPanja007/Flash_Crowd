@@ -109,8 +109,8 @@ const getParticipatedEvents = AsyncHandler(async (req, res) => {
 });
 
 const addParticipant = AsyncHandler(async (req, res) => {
-  const { eventId, participantId } = req.body;
-  if (!eventId || !participantId) {
+  const { eventId } = req.params;
+  if (!eventId) {
     return res.status(400).json({
       success: false,
       message: "Event ID and Participant ID are required",
@@ -123,7 +123,7 @@ const addParticipant = AsyncHandler(async (req, res) => {
       message: "Event not found",
     });
   }
-  if (event.participants.includes(participantId)) {
+  if (event.participants.includes(req.user._id)) {
     return res.status(400).json({
       success: false,
       message: "Participant already added to the event",
@@ -135,8 +135,11 @@ const addParticipant = AsyncHandler(async (req, res) => {
       message: "Event is full, cannot add more participants",
     });
   }
-  event.participants.push(participantId);
+  event.participants.push(req.user._id);
   await event.save();
+
+  event.populate("host", "_id fullName avatar");
+
 
   return res.status(200).json({
     success: true,
