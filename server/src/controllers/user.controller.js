@@ -98,7 +98,7 @@ const updateUserInfo = AsyncHandler(async (req, res) => {
 });
 
 const getUserInfo = AsyncHandler(async (req, res) => {
-  const userId = req.params.id;
+  const userId = req.params.userId;
   if (!userId) {
     return res.status(400).json({
       success: false,
