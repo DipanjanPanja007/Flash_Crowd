@@ -129,7 +129,7 @@ const OngoingEvent = () => {
     <div className="bg-gray-50 min-h-screen p-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Upcoming Events</h1>
 
-      <div className="flex overflow-x-auto gap-6 pb-4">
+      <div className="flex md:grid overflow-x-auto md:overflow-visible gap-6 md:gap-8 pb-4 md:pb-0 md:grid-cols-2 lg:grid-cols-3">
         {events.map((event) => {
           console.log(event);
           event.position = event.location;
@@ -146,7 +146,7 @@ const OngoingEvent = () => {
           return (
             <div
               key={event._id}
-              className="min-w-full md:min-w-[50%] lg:min-w-[33.3333%] bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              className="min-w-[90%] sm:min-w-[70%] md:min-w-0 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               {/* Event Image */}
               <div className="h-48">
