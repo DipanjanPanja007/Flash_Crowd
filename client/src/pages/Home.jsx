@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, useAnimation, useInView } from 'framer-motion';
 import SportsCarousel from '../components/SportsCarousel';
+import Footer from '../components/Footer';
 
 const LandingPage = () => {
     const controls = useAnimation();
@@ -108,6 +109,7 @@ const LandingPage = () => {
                 </motion.div>
             </div>
             {<SportsCarousel />}
+            <Footer/>
         </div>
     );
 };
