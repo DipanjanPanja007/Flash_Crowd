@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { FiUser, FiStar, FiUsers, FiAward } from 'react-icons/fi';
+import { useState } from 'react';
 
 const OtherProfile = ({ id }) => {
     const [user, setUser] = useState(null);

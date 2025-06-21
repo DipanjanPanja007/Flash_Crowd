@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import SportsCarousel from '../components/SportsCarousel';
 import Footer from '../components/Footer';
+import EventsList from '../components/UpcomingEventForHome';
 
 const LandingPage = () => {
     const controls = useAnimation();
@@ -109,6 +110,7 @@ const LandingPage = () => {
                 </motion.div>
             </div>
             {<SportsCarousel />}
+            <EventsList/>
             <Footer/>
         </div>
     );
