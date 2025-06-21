@@ -11,7 +11,7 @@ import { axiosInstance } from "../lib/axios.js";
 import { toast } from "react-hot-toast";
 import Map from "./Map.jsx";
 
-const OngoingEvent = () => {
+const EventsList = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,12 +19,13 @@ const OngoingEvent = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axiosInstance.get(`/event/currEvent`);
-
-        // Normalize events data to handle location objects
-        const normalizedEvents = response?.data?.events
-
-        setEvents(normalizedEvents);
+        const response = await axiosInstance.get(`/event/upcomingEvent`);
+        // Get the last 3 upcoming events by sorting and slicing
+        const sortedEvents = response?.data?.events?.sort((a, b) => 
+          new Date(a.startTime) - new Date(b.startTime)
+        );
+        const lastThreeEvents = sortedEvents?.slice(-3) || [];
+        setEvents(lastThreeEvents);
       } catch (err) {
         console.error("Error fetching events:", err);
         setError("Failed to load events. Please try again later.");
@@ -54,7 +55,7 @@ const OngoingEvent = () => {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-        {[...Array(6)].map((_, index) => (
+        {[...Array(3)].map((_, index) => (
           <div
             key={index}
             className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse"
@@ -78,7 +79,7 @@ const OngoingEvent = () => {
   if (error) {
     return (
       <div className="bg-gray-50 min-h-screen p-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Upcoming Events</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Last 3 Upcoming Events</h1>
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           {error}
         </div>
@@ -89,7 +90,7 @@ const OngoingEvent = () => {
   if (!events || events.length === 0) {
     return (
       <div className="bg-gray-50 min-h-screen p-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Upcoming Events</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Last 3 Upcoming Events</h1>
         <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
           No upcoming events found.
         </div>
@@ -102,12 +103,9 @@ const OngoingEvent = () => {
       const response = await axiosInstance.post(`/event/add-participant`, {
         eventId,
       });
-      console.log(response);
 
       if (response.data.success) {
         toast.success("Successfully joined the event!");
-
-        // Optionally, you can refresh the events list or update the state
         setEvents((prevEvents) =>
           prevEvents.map((event) =>
             event._id === eventId
@@ -117,7 +115,6 @@ const OngoingEvent = () => {
         );
       } else {
         toast.error(response.data.message || "Failed to join the event.");
-        //alert("Failed to join the event. Please try again.");
       }
     } catch (error) {
       console.error("Error joining event:", error);
@@ -127,13 +124,11 @@ const OngoingEvent = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Upcoming Events</h1>
+      <h1 className="text-3xl font-bold text-indigo-700 text-center mb-8">Last 3 Upcoming Events</h1>
 
-      <div className="flex md:grid overflow-x-auto md:overflow-visible gap-6 md:gap-8 pb-4 md:pb-0 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {events.map((event) => {
-          console.log(event);
           event.position = event.location;
-
           const start = formatDateTime(event.startTime);
           const end = formatDateTime(event.endTime);
           const participantsCount = event.participants?.length || 0;
@@ -146,11 +141,11 @@ const OngoingEvent = () => {
           return (
             <div
               key={event._id}
-              className="min-w-[90%] sm:min-w-[70%] md:min-w-0 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              className="bg-white border border-black rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 p-5"
             >
               {/* Event Image */}
               <div className="h-48">
-                {<Map events={[event]} className="" />}
+                <Map events={[event]} className="" />
               </div>
 
               {/* Event Content */}
@@ -175,10 +170,10 @@ const OngoingEvent = () => {
                 {/* Host */}
                 <div className="flex items-center mb-4">
                   <div className="bg-gray-200 rounded-full mr-3">
-                    {/* <FaUser className="text-gray-600" /> */}
                     <img
                       className="w-10 h-10 rounded-full"
                       src={event?.host?.avatar}
+                      alt="Host avatar"
                     />
                   </div>
                   <div>
@@ -204,7 +199,7 @@ const OngoingEvent = () => {
                   <div className="flex items-center">
                     <FaMapMarkerAlt className="text-gray-400 mr-3" />
                     <span className="text-gray-700">
-                      {"Location not specified"}
+                      {event.location?.address || "Location not specified"}
                     </span>
                   </div>
                 </div>
@@ -241,4 +236,4 @@ const OngoingEvent = () => {
   );
 };
 
-export default OngoingEvent;
+export default EventsList;
