@@ -11,7 +11,7 @@ import { axiosInstance } from "../lib/axios.js";
 import { toast } from "react-hot-toast";
 import Map from "./Map.jsx";
 
-const EventsList = () => {
+const OngoingEvent = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +20,7 @@ const EventsList = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axiosInstance.get(`/event/upcomingEvent`);
+        const response = await axiosInstance.get(`/event/currEvent`);
 
         // console.log("Fetched events:", response?.data?.events?.[0]?.host?.avatar);
 
@@ -36,7 +36,7 @@ const EventsList = () => {
         //         ? `${event.location.lat}, ${event.location.lng}` 
         //         : 'Location not specified')
         // })) || [];
-        console.log("Normalized events:", normalizedEvents);
+        // console.log("Normalized events:", normalizedEvents);
         setEvents(normalizedEvents);
       } catch (err) {
         console.error("Error fetching events:", err);
@@ -254,4 +254,4 @@ const EventsList = () => {
   );
 };
 
-export default EventsList;
+export default OngoingEvent;
